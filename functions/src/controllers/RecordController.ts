@@ -1,6 +1,10 @@
 import * as functions from "firebase-functions";
 import {RecordService} from "../services/RecordService";
 import {Record} from "../types/Record";
+import {
+  formatSuccessResponse,
+  formatErrorResponse,
+} from "../utils/responseFormatter";
 
 const recordService = new RecordService();
 
@@ -20,10 +24,19 @@ export const addRecord = functions.https.onRequest(async (req, res) => {
     };
 
     await recordService.addRecord(newRecord);
-    res.json({result: `Record with ID: ${incrementId} added.`});
+
+    const response = formatSuccessResponse(
+      [newRecord],
+      "Operation completed successfully."
+    );
+    res.json(response);
   } catch (error) {
     console.error("Error adding record: ", error);
-    res.status(500).send("Internal Server Error");
+    const response = formatErrorResponse(
+      "INTERNAL_SERVER_ERROR",
+      "Internal Server Error"
+    );
+    res.status(500).json(response);
   }
 });
 
