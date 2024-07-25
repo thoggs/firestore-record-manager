@@ -1,7 +1,8 @@
 import * as admin from "firebase-admin";
 import {Record} from "../types/Record";
+import {FirebaseConfig} from "../config/FirebaseConfig";
 
-admin.initializeApp();
+FirebaseConfig.initialize();
 
 /**
  * Repository for accessing Firestore.
